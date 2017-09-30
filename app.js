@@ -14,117 +14,127 @@
         scores = [0,0];
         roundStore = 0;
         activePlayer = 0;
+           var holdButtonShow = document.querySelector('.btn-hold');
+           var rollButtonShow = document.querySelector('.btn-roll');
+
+        function dice(){
+            var dice =  Math.floor(Math.random() * 6) + 1;
+            return dice;
+        }
 
 
-        document.querySelector('.dice').style.display = 'none';
 
-        document.querySelector('.btn-roll').addEventListener('click',function(){
+            function roleDice(){
+                var diceValue = dice();
+                var domDice = document.querySelector('.dice') ;
+                domDice.style.display = 'block' ;
+                domDice.src = 'dice-' + diceValue + '.png';
+                 roundStore = roundStore + diceValue;
+                document.querySelector('#current-' + activePlayer).textContent = roundStore ; 
+                //check if dice value is 1
+                if(diceValue==1){
+                    roundStore = 0;
+                    document.querySelector('#current-' + activePlayer).textContent = 0 ;  
+                  if(activePlayer == 0){
+                      activePlayer =1;
 
-        var dice =  Math.floor(Math.random() * 6) + 1;
-        var domDice = document.querySelector('.dice') ;
-            domDice.style.display = 'block' ;
-            domDice.src = 'dice-' + dice + '.png';
-             roundStore = roundStore + dice;
-            document.querySelector('#current-' + activePlayer).textContent = roundStore ; 
-            //check if dice value is 1
-            if(dice==1){
+                      // add active class to player 1
+                var active =  document.querySelector('.player-0-panel');
+                active.classList.remove('active');
+                var active1 = document.querySelector('.player-1-panel');
+                active1.classList.add('active');
+                  }
+                    else if(activePlayer==1){
+                      activePlayer = 0;
+                        //add active class to player 0
+                       var active2 =  document.querySelector('.player-1-panel');
+                        active2.classList.remove('active');
+                        var active3 = document.querySelector('.player-0-panel');
+                        active3.classList.add('active'); 
+                    }
+                    }
+            };
+
+
+
+    function holdDice(){
+          if(activePlayer == 0){
+
+                    //adding score per round
+                     scores[0] = scores[0] + roundStore;
+                     document.querySelector('#score-' + activePlayer).textContent =  scores[0] ; 
+                //check if score is  greater or equal than 100 , declare winner
+                  if(scores[0] >= 100){
+                    document.querySelector('#name-' + activePlayer).textContent = "WINNER!" ;
+                    holdButtonShow.style.display = 'none';
+                    rollButtonShow.style.display = 'none';
+
+                }
+                document.querySelector('#current-' + activePlayer).textContent = 0 ;
                 roundStore = 0;
-                document.querySelector('#current-' + activePlayer).textContent = 0 ;  
-              if(activePlayer == 0){
-                  activePlayer =1;
+                activePlayer = 1;
 
-                  // add active class to player 1
-            var active =  document.querySelector('.player-0-panel');
-            active.classList.remove('active');
-            var active1 = document.querySelector('.player-1-panel');
-            active1.classList.add('active');
-              }
-                else if(activePlayer==1){
-                  activePlayer = 0;
-                    //add active class to player 0
-                   var active2 =  document.querySelector('.player-1-panel');
-                    active2.classList.remove('active');
-                    var active3 = document.querySelector('.player-0-panel');
-                    active3.classList.add('active'); 
-                }
-                }
+                 // add active class to player 1
 
-
-        });
-
-        document.querySelector('.btn-hold').addEventListener('click',function(){
-
-        if(activePlayer == 0){
-
-                //adding score per round
-                 scores[0] = scores[0] + roundStore;
-                 document.querySelector('#score-' + activePlayer).textContent =  scores[0] ; 
-            //check if score is  greater or equal than 100 , declare winner
-              if(scores[0] >= 100){
-                document.querySelector('#name-0').textContent = "WINNER!" ;
-                document.querySelector('.btn-hold').style.display = 'none';
-                document.querySelector('.btn-roll').style.display = 'none';
-
+                var active =  document.querySelector('.player-0-panel');
+                active.classList.remove('active');
+                var active1 = document.querySelector('.player-1-panel');
+                active1.classList.add('active');
             }
-            document.querySelector('#current-' + activePlayer).textContent = 0 ;
+                    else if(activePlayer==1){
+
+                    scores[1] = scores[1] + roundStore;
+                    document.querySelector('#score-' + activePlayer).textContent =  scores[1] ; 
+                    if(scores[1] >= 100){
+                    document.querySelector('#name-' + activePlayer).textContent = "WINNER!" ;
+                    holdButtonShow.style.display = 'none';
+                    rollButtonShow.style.display = 'none';
+
+                }
+                        
+                document.querySelector('#current-' + activePlayer).textContent = 0 ;
+                roundStore = 0;
+                activePlayer = 0;
+
+            // add active class to player 0
+
+            var active2 =  document.querySelector('.player-1-panel');
+            active2.classList.remove('active');
+            var active3 = document.querySelector('.player-0-panel');
+            active3.classList.add('active');   
+                    }
+    };
+
+
+    function reset(){
+        
+               if(confirm('Are you sure?')==true)    {
+
+            scores[0] = 0 ;
+            scores[1] = 0 ;    
             roundStore = 0;
-            activePlayer = 1;
+            activePlayer = 0;
+             var active2 =  document.querySelector('.player-1-panel');
+           active2.classList.remove('active');
+           var active3 = document.querySelector('.player-0-panel');
+           active3.classList.add('active'); 
+           document.querySelector('#name-0').textContent = "PLAYER 1" ;
+           document.querySelector('#name-1').textContent = "PLAYER 2" ;
 
-             // add active class to player 1
-
-            var active =  document.querySelector('.player-0-panel');
-            active.classList.remove('active');
-            var active1 = document.querySelector('.player-1-panel');
-            active1.classList.add('active');
-        }
-                else if(activePlayer==1){
-
-                      scores[1] = scores[1] + roundStore;
-            document.querySelector('#score-' + activePlayer).textContent =  scores[1] ; 
-                         if(scores[1] >= 100){
-                document.querySelector('#name-1').textContent = "WINNER!" ;
-                document.querySelector('.btn-hold').style.display = 'none';
-                document.querySelector('.btn-roll').style.display = 'none';
-
+            document.querySelector('.dice').style.display = 'none';
+            holdButtonShow.style.display = 'block';
+            rollButtonShow.style.display = 'block';
+            document.querySelector('#current-0').textContent = 0;
+            document.querySelector('#current-1').textContent = 0;
+            document.querySelector('#score-0').textContent =  ""; 
+            document.querySelector('#score-1').textContent = "" ; 
             }
-                        document.querySelector('#current-' + activePlayer).textContent = 0 ;
-                        roundStore = 0;
-                        activePlayer = 0;
-
-                             // add active class to player 0
-
-                    var active2 =  document.querySelector('.player-1-panel');
-                    active2.classList.remove('active');
-                    var active3 = document.querySelector('.player-0-panel');
-                    active3.classList.add('active');   
+                else{
+                    console.log("Keep continue");
                 }
-        });
-
-    // Reset Everthing
-        document.querySelector('.btn-new').addEventListener('click',function(){
-
-        if(confirm('Are you sure?')==true)    {
-
-        scores[0] = 0 ;
-        scores[1] = 0 ;    
-        roundStore = 0;
-        activePlayer = 0;
-         var active2 =  document.querySelector('.player-1-panel');
-       active2.classList.remove('active');
-       var active3 = document.querySelector('.player-0-panel');
-       active3.classList.add('active'); 
-       document.querySelector('#name-0').textContent = "PLAYER 1" ;
-       document.querySelector('#name-1').textContent = "PLAYER 2" ;
+    };
 
         document.querySelector('.dice').style.display = 'none';
-        document.querySelector('.btn-hold').style.display = 'block';
-        document.querySelector('.btn-roll').style.display = 'block';
-        document.querySelector('#current-0').textContent = 0;
-        document.querySelector('#current-1').textContent = 0;
-        document.querySelector('#score-0').textContent =  ""; 
-        document.querySelector('#score-1').textContent = "" ; 
-        }
-            else{
-                console.log("Keep continue");
-            }
-        });
+        document.querySelector('.btn-roll').addEventListener('click',roleDice);
+        document.querySelector('.btn-hold').addEventListener('click',holdDice);
+        document.querySelector('.btn-new').addEventListener('click',reset);
